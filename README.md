@@ -1,3 +1,5 @@
+# makemore - A character level Language Model
+
 ## Running the project
 ### Virtual Environments in Python
 
