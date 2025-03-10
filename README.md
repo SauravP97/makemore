@@ -61,6 +61,45 @@ The updated map with probabilities look somewhat like this.
 
 ![Bigram map probabilities](/media/bigram_map_prob.png)
 
+Now, we have the probabilities of the occurnece of the next character for each character. We can start sampling more characters based on the given probability distributions.
+We will use Pytorch's [Multinomial](https://pytorch.org/docs/stable/generated/torch.multinomial.html) to sample next character based on the given probability distribution.
+
+```python
+
+# Sampling more words
+g = torch.Generator().manual_seed(2147483647)
+
+for i in range(40):
+    out = []
+    ix = 0
+    while True:
+        p = P[ix]
+        ix = torch.multinomial(p, num_samples=1, replacement=True, generator=g).item()
+        out.append(itos[ix])
+        if ix == 0:
+            break
+    print(''.join(out))
+
+```
+
+The sampling process described below is repeated until we reach at the end character `.`.
+
+![multinomial sampling](/media/sampling_multinomial.png)
+
+We can now sample more words with the above approach.
+
+```
+cexze.
+momasurailezitynn.
+konimittain.
+llayn.
+ka.
+da.
+staiyaubrtthrigotai.
+moliellavo.
+...
+```
+
 ## Running the project
 ### Virtual Environments in Python
 
