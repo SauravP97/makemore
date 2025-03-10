@@ -11,6 +11,56 @@ This repo covers the work of Andrej's [makemore](https://github.com/karpathy/mak
 
 ## Bigram model
 
+A **Bigram** model performs next character prediction on the basis of the current character.
+
+To implement a Bigram model, we will need a training dataset. We build our training dataset with the help of a collection of [names](/datasets/names.txt) and further plucking out the bigrams from it. Bigram here refers to the set of character pairs present in the **names** dataset.
+
+***Goal The end goal is to generate / make more names similar to those present in the **names** dataset, but potentially never seen before in the dataset.***
+
+Out current names dataset with approx `32K` examples looks somewhat like this.
+
+```
+emma
+olivia
+ava
+isabella
+sophia
+charlotte
+...
+```
+
+Now it's time to pluck out the bigrams from the above dataset. We have a special character `.` which will act as a starting and the ending character for names dataset.
+
+Eg. `emma` will be interpreted as `.emma.`
+
+And hence we can have following set of bigrams from this example:
+`{ '.e', 'em', 'mm', 'ma', 'a.'}`
+
+Since all the names are in lower case characters (no special characters), we can safely say that there can be `26 + 1` possible characters (including `.`) and `(26+1) * (26+1) = 729` possible bigrams.
+
+We will maintain a map that will count the frequency of each bigrams in the training dataset. It can be visualized in this way.
+
+![Bigram Map](/media/bigram_map.png)
+
+We can see the above map stores the frequency of each possible bigrams. Now instead of storing frequency, let's store the probability of occurence of each bigram.
+
+![probability distribution](/media/prob_dist.png)
+
+We have used [Broadcasting](https://numpy.org/doc/stable/user/basics.broadcasting.html) to achieve this in our existing bigram count map.
+
+***Note: We have initially added 1 to all the bigram counts to perform model smoothing i.e. to avoid the presence of 0 values in the map leading to infinite log values.***
+
+```python
+# Broadcasting the column level sum
+# Add 1 to all numbers i.e. perform Model smoothing to avoid negative log likelihoods
+P = (N+1).float()
+P = P / P.sum(1, keepdim=True)
+```
+
+The updated map with probabilities look somewhat like this.
+
+![Bigram map probabilities](/media/bigram_map_prob.png)
+
 ## Running the project
 ### Virtual Environments in Python
 
