@@ -228,6 +228,22 @@ for i in range(20):
     print(''.join(out))
 ```
 
+The following words were sampled from our Neural net.
+
+```
+cexze.
+momasurailezityha.
+konimittain.
+llayn.
+ka.
+da.
+staiyaubrtthrigotai.
+moliellavo.
+...
+```
+
+The above samples were very similar to what we sampled from our previous bigram model. This is expected to happen since we used the same bigram (set of 2 consecutive characters) training data for both the approaches.
+
 ## Running the project
 ### Virtual Environments in Python
 
