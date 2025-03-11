@@ -9,7 +9,7 @@ This repo covers the work of Andrej's [makemore](https://github.com/karpathy/mak
 1. [Bigram model](#bigram-model)
 
 
-## Bigram model
+## 1. Bigram model
 
 A **Bigram** model performs next character prediction on the basis of the current character.
 
@@ -99,6 +99,46 @@ staiyaubrtthrigotai.
 moliellavo.
 ...
 ```
+
+### Building a Loss function
+
+Since we have a generation model that can generate more samples, we should also be able to determine a **Loss** function that should be able to compute the Loss of our model. In general we use to compute Loss by observing the generated resule and the actual result. But here, we have characters and hence we can't apply the standard loss caculation method.
+
+Instead, we will use our calculated Probablility distribution table to check the likelihood of the occruence of the next character from our training dataset. Using this we will calculate the overall loss incurred on the training dataset.
+
+```python
+next_character_probability = P[current_character][next_character]
+log_prod = log(next_character_probability)
+
+# Goal is to maximize the Log likelihood i.e. the likelihood of the occurnece of the next character
+# sampled from words present in the training dataset.
+log_likelihood += log_prob
+
+### Goal is to minimize the negative log likelihood.
+negative_log_likelihood = -log_likelihood
+```
+
+We can use the above calculation logic for all the words present in the Training dataset.
+
+```python
+for w in words:
+    chs = ['.'] + list(w) + ['.']
+    for ch1, ch2 in zip(chs, chs[1:]):
+        ix1 = stoi[ch1]
+        ix2 = stoi[ch2]
+        prob = P[ix1, ix2]
+        logprob = torch.log(prob)
+        log_likelihood += logprob
+
+negative_log_likelihood = -log_likelihood
+```
+
+The above process can visualized this way.
+
+![compute loss](/media/loss_bigram.png)
+
+---
+### Neural Network implementation of Bigram
 
 ## Running the project
 ### Virtual Environments in Python
